@@ -44,9 +44,8 @@ int connect_to_server()
     const char request[] = "GET http://www.amberbio.com/connect_time HTTP/1.1\r\n\r\n";
 
     ssize_t bytes_written = write(sock_fd, request, sizeof(request) - 1);
-    if (bytes_written != 53)
+    if (bytes_written != sizeof(request) - 1)
         return -3;
-//    printf("bytes written = %zd\n", bytes_written);
 
     char response[1000];
     ssize_t bytes_read = read(sock_fd, response, 1000);
