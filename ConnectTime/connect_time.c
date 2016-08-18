@@ -44,19 +44,24 @@ int connect_to_server()
     const char request[] = "GET http://www.amberbio.com/connect_time HTTP/1.1\r\n\r\n";
 
     ssize_t bytes_written = write(sock_fd, request, sizeof(request) - 1);
-    if (bytes_written != sizeof(request) - 1)
+    if (bytes_written != sizeof(request) - 1) {
+        close(sock_fd);
         return -3;
+    }
 
     char response[1000];
     ssize_t bytes_read = read(sock_fd, response, 1000);
-    if (bytes_read < 12)
+    if (bytes_read < 12) {
+        close(sock_fd);
         return -4;
+    }
 //    printf("bytes read = %zd\n\n", bytes_read);
 
 //    printf("%s\n", response);
 
     if (strncmp(response, "HTTP/1.1 400", 12) != 0) {
 //        printf("incorrect response\n");
+        close(sock_fd);
         return -4;
     }
 
